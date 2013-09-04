@@ -145,9 +145,6 @@ public class LastFm implements TrackSearch {
             track.setAlbumName(artist);
 
 
-            track.setDuration(trackObject.get("duration").getAsString());
-            track.setName(trackObject.get("name").getAsString());
-
 
             return track;
 

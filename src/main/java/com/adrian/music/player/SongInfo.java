@@ -67,7 +67,7 @@ public class SongInfo implements Runnable{
                     title = metaData.getTitle();
 
                 }catch (Exception e){
-                    title = "no title";
+                    title = "";
                 }
 
                try {
@@ -75,7 +75,7 @@ public class SongInfo implements Runnable{
                  artist = metaData.getArtist();
 
                 }catch (Exception e){
-                  artist = "no artist";
+                  artist = "";
                 }
 
                 if(!nowPlaying.contentEquals(title))

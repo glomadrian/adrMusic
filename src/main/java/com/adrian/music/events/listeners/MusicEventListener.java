@@ -22,12 +22,12 @@ public class MusicEventListener {
     public void handleNewSongPlaying(NewSongPlayingEvent event){
 
        //TODO Mejorar que no llegue vacia
-
-        Thread notificationThread;
-
-
-       notificationThread = new Thread(new NotificationLauncher(event.getTrack()));
-       notificationThread.start();
+       if(event.getTrack().getArtist()!="" || event.getTrack().getName()!="")
+       {
+           Thread notificationThread;
+           notificationThread = new Thread(new NotificationLauncher(event.getTrack()));
+           notificationThread.start();
+       }
    }
 
 
