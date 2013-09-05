@@ -4,6 +4,7 @@ import com.adrian.music.models.Track;
 import com.adrian.music.notifications.ConsoleNotification;
 import com.adrian.music.notifications.GnomeNotidication;
 import com.adrian.music.notifications.MusicNotification;
+import com.adrian.music.notifications.OsXNotification;
 import com.adrian.music.utils.Utils;
 
 /**
@@ -39,10 +40,11 @@ public class NotificationLauncher implements Runnable {
 
 
             //LINUX
-            if(Utils.getOS().contains("Linux"))
+            if(Utils.getOS().contains("linux"))
                 osNotification = new GnomeNotidication();
             //MAC
-
+            if(Utils.getOS().contains("mac os x"))
+                osNotification = new OsXNotification();
 
             //WINDOWS
 

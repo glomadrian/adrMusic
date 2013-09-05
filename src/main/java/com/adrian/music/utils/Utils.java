@@ -17,7 +17,7 @@ public class Utils {
 
     public static String getOS(){
 
-        String os = System.getProperty("os.name");
+        String os = System.getProperty("os.name").toLowerCase();
         return  os;
     }
 
