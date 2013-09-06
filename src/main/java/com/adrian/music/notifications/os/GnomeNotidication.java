@@ -1,6 +1,8 @@
-package com.adrian.music.notifications;
+package com.adrian.music.notifications.os;
 
 import com.adrian.music.managers.CoverManager;
+import com.adrian.music.notifications.MusicNotification;
+import com.adrian.music.utils.Utils;
 
 import java.io.IOException;
 
@@ -11,24 +13,27 @@ import java.io.IOException;
  * Time: 12:07
  * To change this template use File | Settings | File Templates.
  */
-public class GnomeNotidication implements MusicNotification{
+public class GnomeNotidication implements MusicNotification {
 
     String title;
     String artist;
+    String imageUri;
 
     @Override
     public void createNotification(String title, String artist) {
 
         this.title = title;
         this.artist = artist;
+
+        CoverManager manager = new CoverManager();
+        imageUri = manager.downloadCover(title,artist);
     }
 
     @Override
     public void sendNotification() {
 
 
-        CoverManager manager = new CoverManager();
-        String imageUri = manager.downloadCover(title,artist);
+
 
         try {
 
@@ -41,5 +46,7 @@ public class GnomeNotidication implements MusicNotification{
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        //TODO Hacer algo con esto
+        Utils.deleteFile(imageUri);
     }
 }

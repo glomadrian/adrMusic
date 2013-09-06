@@ -25,11 +25,22 @@ public class CoverManager {
 
 
         Track track = trackSearch.searhTrack(title, artist);
+        String fileName = Utils.random();
+        String imageURL = track.getSmallImageUrl();
+        //Image size
 
+        String imageSize = Utils.getConfigurationProperties().getProperty("imageSize");
+
+        if(imageSize.equals("small"))
+               imageURL = track.getSmallImageUrl();
+        if(imageSize.equals("medium"))
+               imageURL = track.getMediumImageUrl();
+        if(imageSize.equals("big"))
+               imageURL = track.getBigImageUrl();
 
         try {
 
-            Utils.saveImage(track.getMediumImageUrl(), "cover");
+            Utils.saveImage(imageURL, fileName);
 
             //Comando
             String pwd = "pwd";
@@ -46,7 +57,8 @@ public class CoverManager {
                 pwdResult.append(s);
             }
 
-            coverUri = pwdResult.toString()+"/cover";
+
+            coverUri = pwdResult.toString()+"/"+fileName;
 
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

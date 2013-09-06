@@ -1,4 +1,4 @@
-package com.adrian.music.notifications;
+package com.adrian.music.notifications.nativeJava;
 
 import ch.twinkle.NotificationBuilder;
 import ch.twinkle.style.INotificationStyle;
@@ -6,6 +6,8 @@ import ch.twinkle.style.theme.DarkDefaultNotification;
 import ch.twinkle.style.theme.LightDefaultNotification;
 import ch.twinkle.window.Positions;
 import com.adrian.music.managers.CoverManager;
+import com.adrian.music.notifications.MusicNotification;
+import com.adrian.music.notifications.nativeJava.sytles.AdrianStyle;
 import com.adrian.music.utils.Utils;
 
 /**
@@ -18,6 +20,8 @@ import com.adrian.music.utils.Utils;
 public class NativeNotification implements MusicNotification {
 
     NotificationBuilder notification;
+    String imageUri;
+    CoverManager manager;
 
     @Override
     public void createNotification(String title, String artist) {
@@ -37,8 +41,8 @@ public class NativeNotification implements MusicNotification {
 
         //Image
 
-        CoverManager manager = new CoverManager();
-        String imageUri = manager.downloadCover(title,artist);
+        manager = new CoverManager();
+        imageUri = manager.downloadCover(title,artist);
 
         notification = new NotificationBuilder();
         notification
@@ -54,7 +58,11 @@ public class NativeNotification implements MusicNotification {
 
     @Override
     public void sendNotification() {
+
         notification.showNotification();
+
+        Utils.deleteFile(imageUri);
+
     }
 
 
@@ -94,6 +102,8 @@ public class NativeNotification implements MusicNotification {
             notificationStyle = new DarkDefaultNotification();
         if(style.equals("light"))
             notificationStyle = new LightDefaultNotification();
+        if(style.equals("adrian"))
+            notificationStyle = new AdrianStyle();
 
         return  notificationStyle;
     }

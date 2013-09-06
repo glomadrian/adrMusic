@@ -1,4 +1,6 @@
-package com.adrian.music.notifications;
+package com.adrian.music.notifications.console;
+
+import com.adrian.music.notifications.MusicNotification;
 
 /**
  * Created with IntelliJ IDEA.

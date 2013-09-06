@@ -1,7 +1,9 @@
 package com.adrian.music.utils;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.Properties;
 
 /**
@@ -33,8 +35,10 @@ public class Utils {
             os.write(b, 0, length);
         }
 
-        is.close();
-        os.close();
+
+
+
+
     }
 
     public static Properties getConfigurationProperties(){
@@ -52,6 +56,18 @@ public class Utils {
 
         return prop;
 
+    }
+
+
+    public static void deleteFile(String uri){
+        File file = new File(uri);
+        file.delete();
+
+    }
+
+    public static String random()
+    {
+        return new BigInteger(130,  new SecureRandom()).toString(32);
     }
 
 }

@@ -2,6 +2,10 @@ package com.adrian.music.notifications.launcher;
 
 import com.adrian.music.models.Track;
 import com.adrian.music.notifications.*;
+import com.adrian.music.notifications.console.ConsoleNotification;
+import com.adrian.music.notifications.nativeJava.NativeNotification;
+import com.adrian.music.notifications.os.GnomeNotidication;
+import com.adrian.music.notifications.os.OsXNotification;
 import com.adrian.music.utils.Utils;
 
 /**

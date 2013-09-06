@@ -22,6 +22,7 @@ public class MusicEventListener {
     public void handleNewSongPlaying(NewSongPlayingEvent event){
 
        //TODO Mejorar que no llegue vacia
+
        if(event.getTrack().getArtist()!="" || event.getTrack().getName()!="")
        {
            Thread notificationThread;
