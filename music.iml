@@ -18,6 +18,7 @@
     <orderEntry type="library" name="Maven: com.sun.media.codecs:mp3plugin:1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: ch:notifications:2" level="project" />
   </component>
 </module>
 

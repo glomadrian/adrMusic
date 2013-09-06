@@ -34,7 +34,7 @@ public class LastFm implements TrackSearch {
 
     String apiKey = Constants.LAST_FM_API_KEY;
     String secret = Constants.LAST_FM_SECRET;
-    String noImageAvariable = "http://userserve-ak.last.fm/serve/_/28040233/Noise+Boyz+No+Image+Available.png";
+    String noImageAvariable = "http://www.restoredeletedfiles.us/images/restore-deleted-music.png";
 
     String serviceURL =  "http://ws.audioscrobbler.com/2.0/";
     String method = "?method=track.getInfo&";

@@ -1,13 +1,8 @@
 package com.adrian.music.notifications;
 
-import com.adrian.music.models.Track;
-import com.adrian.music.services.TrackSearch.TrackSearch;
-import com.adrian.music.services.TrackSearch.LastFm;
-import com.adrian.music.utils.Utils;
+import com.adrian.music.managers.CoverManager;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,43 +27,13 @@ public class GnomeNotidication implements MusicNotification{
     public void sendNotification() {
 
 
-        //TODO Mejorar ejecucion de comandos
-
-        //Imagen cover
-        TrackSearch albumSearch = new LastFm();
-        Track track = albumSearch.searhTrack(title, artist);
-
-        //Descargar y guardar imagen temporalmente
+        CoverManager manager = new CoverManager();
+        String imageUri = manager.downloadCover(title,artist);
 
         try {
 
-            Utils.saveImage(track.getMediumImageUrl(),"cover");
 
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-        //Comando
-        String pwd = "pwd";
-
-
-        String s;
-        try {
-            Process procesPWD = Runtime.getRuntime().exec(pwd);
-
-            StringBuffer pwdResult = new StringBuffer();
-
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(procesPWD.getInputStream()));
-            while ((s = stdInput.readLine()) != null) {
-                pwdResult.append(s);
-            }
-
-
-            String coverUri = pwdResult.toString()+"/cover";
-
-            String[] command = new String[] {"notify-send","-i",coverUri, artist, title};
-
+            String[] command = new String[] {"notify-send","-i",imageUri, artist, title};
 
             Process p = Runtime.getRuntime().exec(command);
 

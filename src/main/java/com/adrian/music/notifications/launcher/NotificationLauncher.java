@@ -1,10 +1,7 @@
 package com.adrian.music.notifications.launcher;
 
 import com.adrian.music.models.Track;
-import com.adrian.music.notifications.ConsoleNotification;
-import com.adrian.music.notifications.GnomeNotidication;
-import com.adrian.music.notifications.MusicNotification;
-import com.adrian.music.notifications.OsXNotification;
+import com.adrian.music.notifications.*;
 import com.adrian.music.utils.Utils;
 
 /**
@@ -29,33 +26,50 @@ public class NotificationLauncher implements Runnable {
 
 
 
-            //Notificacion de consola
+            //Check if console notification is true
+            String consoleNotificationConf = Utils.getConfigurationProperties().getProperty("consoleNotification");
 
-            MusicNotification consoleNotification = new ConsoleNotification();
-            consoleNotification.createNotification(track.getName(), track.getArtist());
-            consoleNotification.sendNotification();
+            if(consoleNotificationConf.equals("true")){
+                //Notificacion de consola
 
-            //Notificacion del SO
-            MusicNotification osNotification = null;
-
-
-            //LINUX
-            if(Utils.getOS().contains("linux"))
-                osNotification = new GnomeNotidication();
-            //MAC
-            if(Utils.getOS().contains("mac os x"))
-                osNotification = new OsXNotification();
-
-            //WINDOWS
-
-
-            if(osNotification!=null){
-                osNotification.createNotification(track.getName(), track.getArtist());
-                osNotification.sendNotification();
+                MusicNotification consoleNotification = new ConsoleNotification();
+                consoleNotification.createNotification(track.getName(), track.getArtist());
+                consoleNotification.sendNotification();
             }
 
 
-            //TODO Notificacion allJoyn
+            //Check if console notification is true
+            String dekstopNotificationConf = Utils.getConfigurationProperties().getProperty("desktopNotification");
+
+            if(dekstopNotificationConf.equals("native")){
+
+                MusicNotification nativeNotification= new NativeNotification();
+                nativeNotification.createNotification(track.getName(), track.getArtist());
+                nativeNotification.sendNotification();
+
+            }
+
+            if(dekstopNotificationConf.equals("os"))
+            {
+
+                //Notificacion del SO
+                MusicNotification osNotification = null;
+
+                //LINUX
+                if(Utils.getOS().contains("linux"))
+                    osNotification = new GnomeNotidication();
+                //MAC
+                if(Utils.getOS().contains("mac os x"))
+                    osNotification = new OsXNotification();
+
+                //Fuck windows
+
+                if(osNotification!=null){
+                    osNotification.createNotification(track.getName(), track.getArtist());
+                    osNotification.sendNotification();
+                }
+            }
+
 
     }
 }

@@ -10,9 +10,15 @@
 
     <repositories>
         <repository>
-            <id>adrian.com</id>
+            <id>thirdparty</id>
             <url>http://127.0.0.1:8081/nexus/content/repositories/thirdparty/</url>
         </repository>
+
+        <repository>
+            <id>adrian</id>
+            <url>http://127.0.0.1:8081/nexus/content/repositories/adrian/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -62,8 +68,12 @@
             <version>1.7.2</version>
         </dependency>
 
-
-
+         <!-- Native java notifications -->
+        <dependency>
+            <groupId>ch</groupId>
+            <artifactId>notifications</artifactId>
+            <version>2</version>
+        </dependency>
 
     </dependencies>
 

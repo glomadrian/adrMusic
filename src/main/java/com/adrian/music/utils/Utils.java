@@ -1,10 +1,8 @@
 package com.adrian.music.utils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +13,7 @@ import java.net.URL;
  */
 public class Utils {
 
+    public static Properties prop=null;
     public static String getOS(){
 
         String os = System.getProperty("os.name").toLowerCase();
@@ -36,6 +35,23 @@ public class Utils {
 
         is.close();
         os.close();
+    }
+
+    public static Properties getConfigurationProperties(){
+
+        if (prop==null){
+
+            prop = new Properties();
+            try {
+                prop.load(new FileInputStream("config.properties"));
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+
+
+        return prop;
+
     }
 
 }
