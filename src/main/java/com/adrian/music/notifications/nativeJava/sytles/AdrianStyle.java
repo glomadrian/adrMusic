@@ -2,7 +2,8 @@ package com.adrian.music.notifications.nativeJava.sytles;
 
 import ch.swingfx.color.ColorUtil;
 import ch.twinkle.style.AbstractNotificationStyle;
-import ch.twinkle.style.background.ColorBackground;
+import ch.twinkle.style.background.GradientBackground;
+import ch.twinkle.style.background.IBackground;
 import ch.twinkle.style.closebutton.RoundCloseButton;
 import ch.twinkle.style.overlay.BorderOverlay;
 import ch.twinkle.style.overlay.GradientOverlay;
@@ -24,12 +25,20 @@ public class AdrianStyle extends AbstractNotificationStyle{
 
         super();
         withNotificationWindowCreator(NotificationWindowTypes.DEFAULT);
-        withTitleFontColor(new Color(0xff, 0xcc, 0x33));
+        withTitleFontColor(new Color(183, 165, 37));
         withMessageFontColor(Color.WHITE);
         withAlpha(0.85f);
-        withWidth(800);
-        withBackground(new ColorBackground(new Color(0x10, 0x10, 0x10)));
-        withWindowCornerRadius(8);
+        withWidth(450);
+
+        withTitleFont(new Font("Times New Roman", Font.BOLD, 25));
+        withMessageFont(new Font("Times New Roman", Font.ITALIC, 25));
+//      withBackground(new ColorBackground(new Color(28, 28, 28)));
+
+        IBackground background = new GradientBackground(new Color(53,51,51),new Color(37, 37, 36));
+        background.setAlpha(0.5f);
+        withBackground(background);
+
+        withWindowCornerRadius(28);
         withOverlay(new BorderOverlay(1, Color.WHITE, OverlayPaintMode.MOUSE_OVER,
                 new GradientOverlay(ColorUtil.withAlpha(Color.WHITE, 0f), ColorUtil.withAlpha(Color.WHITE, 0.1f), OverlayPaintMode.MOUSE_OVER)));
         withCloseButton(new RoundCloseButton(ColorUtil.withAlpha(Color.BLACK, 0.6f), Color.WHITE).withPosition(9, 9));

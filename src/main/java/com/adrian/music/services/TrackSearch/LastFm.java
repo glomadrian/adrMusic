@@ -43,7 +43,7 @@ public class LastFm implements TrackSearch {
     private final String USER_AGENT = "Mozilla/5.0";
 
 
-
+     //TODO Mejorar esta clase..
 
 
     public String performSearch(String title, String artist) throws IOException, URISyntaxException, HttpException {
@@ -126,13 +126,11 @@ public class LastFm implements TrackSearch {
                 track.setMediumImageUrl(mediamURL);
                 track.setBigImageUrl(bigImageUrl);
 
-            }catch (NullPointerException e){
+            }catch (NullPointerException | IllegalStateException e){
 
                 //NUll pointer exception por que no hay album, es decir imagenes
 
                 //Se pone imagen por defecto
-
-
                 track.setSmallImageUrl(noImageAvariable);
                 track.setMediumImageUrl(noImageAvariable);
                 track.setBigImageUrl(noImageAvariable);

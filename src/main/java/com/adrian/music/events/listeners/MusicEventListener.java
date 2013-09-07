@@ -23,7 +23,7 @@ public class MusicEventListener {
 
        //TODO Mejorar que no llegue vacia
 
-       if(event.getTrack().getArtist()!="" || event.getTrack().getName()!="")
+       if(event.getTrack().getArtist()!="" && event.getTrack().getName()!="")
        {
            Thread notificationThread;
            notificationThread = new Thread(new NotificationLauncher(event.getTrack()));
