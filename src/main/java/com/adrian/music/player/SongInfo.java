@@ -2,11 +2,13 @@ package com.adrian.music.player;
 
 import com.adrian.music.events.NewSongPlayingEvent;
 import com.adrian.music.events.eventsBus.MusicEventBus;
+import com.adrian.music.exceptions.streamParser.GetSongArtistException;
+import com.adrian.music.exceptions.streamParser.GetSongTitleException;
+import com.adrian.music.exceptions.streamParser.RefreshMetaException;
 import com.adrian.music.models.Track;
 import com.adrian.music.streamMeta.IcyStreamMeta;
 
 import javax.sound.sampled.SourceDataLine;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -83,7 +85,7 @@ public class SongInfo implements Runnable{
                     Thread.sleep(5000);
 
 
-                }catch (IOException | StringIndexOutOfBoundsException e){
+                }catch (RefreshMetaException | StringIndexOutOfBoundsException e){
 
                     LOG.warning("Exception wile read metadata title and artis");
                     LOG.warning(title+" "+artist);
@@ -91,13 +93,15 @@ public class SongInfo implements Runnable{
                     //No se lanza evento en este caso
 
                 } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                  LOG.warning("Thread interrummped");
+                } catch (GetSongTitleException e) {
+                  LOG.warning("Exception wile read song title");
+                } catch (GetSongArtistException e) {
+                  LOG.warning("Exception wile read song Artist");
                 }
 
 
-
-
-                }
+            }
 
 
 

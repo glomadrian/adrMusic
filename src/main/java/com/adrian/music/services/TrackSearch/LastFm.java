@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +32,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class LastFm implements TrackSearch {
+
+    private final static Logger LOG = Logger.getLogger(LastFm.class.getName());
+
 
     String apiKey = Constants.LAST_FM_API_KEY;
     String secret = Constants.LAST_FM_SECRET;
@@ -94,6 +98,9 @@ public class LastFm implements TrackSearch {
         is.close();
 
         //Guardamos el String creado en una variable de tipo String, contiene el objeto en notacion JSON
+
+        LOG.info("LastFM Search: "+method+paramString);
+        LOG.info("LastFm Return: "+sb.toString());
 
         return sb.toString();
 

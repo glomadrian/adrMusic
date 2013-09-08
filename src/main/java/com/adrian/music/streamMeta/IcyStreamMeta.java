@@ -1,5 +1,9 @@
 package com.adrian.music.streamMeta;
 
+import com.adrian.music.exceptions.streamParser.GetSongArtistException;
+import com.adrian.music.exceptions.streamParser.GetSongTitleException;
+import com.adrian.music.exceptions.streamParser.RefreshMetaException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -11,19 +15,16 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IcyStreamMeta {
+public class IcyStreamMeta extends AbstractStreamMeta{
 
     private final static Logger LOG = Logger.getLogger(IcyStreamMeta.class.getName());
 
 
-    protected URL streamUrl;
-    private Map<String, String> metadata;
     private boolean isError;
 
     public IcyStreamMeta(URL streamUrl) {
-        setStreamUrl(streamUrl);
-
-        isError = false;
+        super(streamUrl);
+         isError = false;
     }
 
     /**
@@ -32,14 +33,28 @@ public class IcyStreamMeta {
      * @return String
      * @throws java.io.IOException
      */
-    public String getArtist() throws IOException {
-        Map<String, String> data = getMetadata();
+    public String getArtist() throws GetSongArtistException{
 
-        if (!data.containsKey("StreamTitle"))
-            return "";
+        Map<String, String> data = null;
+        String title = null;
 
-        String streamTitle = data.get("StreamTitle");
-        String title = streamTitle.substring(0, streamTitle.indexOf("-"));
+        try {
+
+           data = getMetadata();
+
+            if (!data.containsKey("StreamTitle"))
+                return "";
+
+            String streamTitle = data.get("StreamTitle");
+            title = streamTitle.substring(0, streamTitle.indexOf("-"));
+
+
+       } catch (IOException | RefreshMetaException e) {
+
+           GetSongArtistException ex=  new GetSongArtistException();
+           ex.initCause(e.getCause());
+           throw ex;
+       }
         return title.trim();
     }
 
@@ -49,8 +64,17 @@ public class IcyStreamMeta {
      * @return String
      * @throws java.io.IOException
      */
-    public String getTitle() throws IOException {
-        Map<String, String> data = getMetadata();
+    public String getTitle() throws GetSongTitleException {
+
+        Map<String, String> data = null;
+        try {
+            data = getMetadata();
+
+        } catch (IOException | RefreshMetaException e) {
+            GetSongTitleException ex=  new GetSongTitleException();
+            ex.initCause(e.getCause());
+            throw ex;
+       }
 
         if (!data.containsKey("StreamTitle"))
             return "";
@@ -60,7 +84,7 @@ public class IcyStreamMeta {
         return artist.trim();
     }
 
-    public Map<String, String> getMetadata() throws IOException {
+    public Map<String, String> getMetadata() throws IOException, RefreshMetaException {
         if (metadata == null) {
             refreshMeta();
         }
@@ -68,8 +92,18 @@ public class IcyStreamMeta {
         return metadata;
     }
 
-    public void refreshMeta() throws IOException {
-        retreiveMetadata();
+    public void refreshMeta() throws RefreshMetaException {
+
+        try {
+            retreiveMetadata();
+        } catch (IOException e) {
+
+            RefreshMetaException ex=  new RefreshMetaException();
+            ex.initCause(e.getCause());
+            throw ex;
+
+        }
+
     }
 
     private void retreiveMetadata() throws IOException {
