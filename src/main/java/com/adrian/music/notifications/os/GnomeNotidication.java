@@ -5,6 +5,7 @@ import com.adrian.music.notifications.MusicNotification;
 import com.adrian.music.utils.Utils;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,10 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class GnomeNotidication implements MusicNotification {
+
+    private final static Logger LOG = Logger.getLogger(GnomeNotidication.class.getName());
+
+
 
     String title;
     String artist;
@@ -32,21 +37,22 @@ public class GnomeNotidication implements MusicNotification {
     @Override
     public void sendNotification() {
 
-
+        LOG.info("Launch gnome notification");
 
 
         try {
-
 
             String[] command = new String[] {"notify-send","-i",imageUri, artist, title};
 
             Process p = Runtime.getRuntime().exec(command);
 
+            Utils.deleteFile(imageUri);
+
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+            LOG.warning("Error wile launch gnome notification, command not found");
         }
 
-        //TODO Hacer algo con esto
-        Utils.deleteFile(imageUri);
+
     }
 }

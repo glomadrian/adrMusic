@@ -5,9 +5,8 @@ import com.adrian.music.services.TrackSearch.LastFm;
 import com.adrian.music.services.TrackSearch.TrackSearch;
 import com.adrian.music.utils.Utils;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,25 +39,9 @@ public class CoverManager {
 
         try {
 
-            Utils.saveImage(imageURL, fileName);
+          File cover =  Utils.saveImage(imageURL, fileName);
 
-            //Comando
-            String pwd = "pwd";
-
-
-            String s;
-
-            Process procesPWD = Runtime.getRuntime().exec(pwd);
-
-            StringBuffer pwdResult = new StringBuffer();
-
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(procesPWD.getInputStream()));
-            while ((s = stdInput.readLine()) != null) {
-                pwdResult.append(s);
-            }
-
-
-            coverUri = pwdResult.toString()+"/"+fileName;
+          return cover.getAbsolutePath();
 
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

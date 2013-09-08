@@ -2,6 +2,8 @@ package com.adrian.music.notifications.console;
 
 import com.adrian.music.notifications.MusicNotification;
 
+import java.util.logging.Logger;
+
 /**
  * Created with IntelliJ IDEA.
  * User: lordfire
@@ -11,8 +13,11 @@ import com.adrian.music.notifications.MusicNotification;
  */
 public class ConsoleNotification implements MusicNotification {
 
+    private final static Logger LOG = Logger.getLogger(ConsoleNotification.class.getName());
+
     String title;
     String artist;
+
 
     @Override
     public void createNotification(String title, String artist) {
@@ -25,6 +30,7 @@ public class ConsoleNotification implements MusicNotification {
     @Override
     public void sendNotification() {
 
+        LOG.info("Launch console notification");
         System.out.println(artist+": "+title);
 
     }

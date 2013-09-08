@@ -10,6 +10,8 @@ import com.adrian.music.notifications.MusicNotification;
 import com.adrian.music.notifications.nativeJava.sytles.AdrianStyle;
 import com.adrian.music.utils.Utils;
 
+import java.util.logging.Logger;
+
 /**
  * Created with IntelliJ IDEA.
  * User: lordfire
@@ -18,6 +20,9 @@ import com.adrian.music.utils.Utils;
  * To change this template use File | Settings | File Templates.
  */
 public class NativeNotification implements MusicNotification {
+
+    private final static Logger LOG = Logger.getLogger(NativeNotification.class.getName());
+
 
     NotificationBuilder notification;
     String imageUri;
@@ -59,6 +64,7 @@ public class NativeNotification implements MusicNotification {
     @Override
     public void sendNotification() {
 
+        LOG.info("Launch native notification");
         notification.showNotification();
 
         Utils.deleteFile(imageUri);

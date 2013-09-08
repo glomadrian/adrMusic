@@ -6,6 +6,7 @@ import com.adrian.music.player.Player;
 import com.adrian.music.services.RadioSearch.PlsExtract;
 import com.adrian.music.services.RadioSearch.RadioSearch;
 import com.adrian.music.services.RadioSearch.RockRadioWeb;
+import com.adrian.music.utils.Utils;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -15,6 +16,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +28,7 @@ import java.util.Map;
  */
 public class Main {
 
+   private final static Logger LOG = Logger.getLogger(Main.class.getName());
 
 
     public static void showRadioList(ArrayList<String> list){
@@ -35,10 +39,25 @@ public class Main {
     }
 
 
+    static void turnOffLog(){
+        LogManager.getLogManager().reset();
+        Logger globalLogger = Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+        globalLogger.setLevel(java.util.logging.Level.OFF);
+
+    }
+
     public static void main(String[] args) throws IOException, LineUnavailableException, UnsupportedAudioFileException {
 
 
         //TODO Mejorar main y capturar excepciones
+
+        String debugProperty = Utils.getConfigurationProperties().getProperty("debug");
+
+        if(debugProperty.contains("false"))
+        turnOffLog();
+
+        LOG.info("Inicia app adrMusic");
+
 
         //Inicializar bus de datos
         MusicEventBus.getMusicEventBus().register(new MusicEventListener());
@@ -74,6 +93,7 @@ public class Main {
         Thread thread = new Thread(player);
         thread.start();
 
+        LOG.info("Throw player thread with url: "+radioUrl);
 
 
     }

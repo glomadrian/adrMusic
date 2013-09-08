@@ -34,7 +34,7 @@ public class LastFm implements TrackSearch {
 
     String apiKey = Constants.LAST_FM_API_KEY;
     String secret = Constants.LAST_FM_SECRET;
-    String noImageAvariable = "http://www.restoredeletedfiles.us/images/restore-deleted-music.png";
+    String noImageAvariable = "http://media-mcw.cursecdn.com/es/thumb/1/1d/No_image.svg/50px-No_image.svg.png";
 
     String serviceURL =  "http://ws.audioscrobbler.com/2.0/";
     String method = "?method=track.getInfo&";
@@ -102,19 +102,17 @@ public class LastFm implements TrackSearch {
     @Override
     public Track searhTrack(String title, String artist) {
 
+        Track track = new Track();
 
-
-        try {
-            String json = performSearch(title, artist);
-
-
-             Track track = new Track();
-
-            JsonElement jelement = new JsonParser().parse(json);
-            JsonObject jobject = jelement.getAsJsonObject();
-            JsonObject trackObject = jobject.getAsJsonObject("track");
 
             try{
+                 String json = performSearch(title, artist);
+
+                JsonElement jelement = new JsonParser().parse(json);
+                JsonObject jobject = jelement.getAsJsonObject();
+                JsonObject trackObject = jobject.getAsJsonObject("track");
+
+
                 JsonObject album = trackObject.get("album").getAsJsonObject();
                 JsonArray imageArray = album.get("image").getAsJsonArray();
 
@@ -126,6 +124,10 @@ public class LastFm implements TrackSearch {
                 track.setMediumImageUrl(mediamURL);
                 track.setBigImageUrl(bigImageUrl);
 
+                track.setArtist(title);
+                track.setAlbumName(artist);
+
+
             }catch (NullPointerException | IllegalStateException e){
 
                 //NUll pointer exception por que no hay album, es decir imagenes
@@ -135,30 +137,12 @@ public class LastFm implements TrackSearch {
                 track.setMediumImageUrl(noImageAvariable);
                 track.setBigImageUrl(noImageAvariable);
 
-            }
+             } catch (IOException | URISyntaxException | HttpException  e) {
 
+                track =  new Track();
+           }
 
-
-            track.setArtist(title);
-            track.setAlbumName(artist);
-
-
-
-            return track;
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (HttpException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-        return new Track();
-
+        return track;
     }
 
 

@@ -8,6 +8,8 @@ import com.adrian.music.notifications.os.GnomeNotidication;
 import com.adrian.music.notifications.os.OsXNotification;
 import com.adrian.music.utils.Utils;
 
+import java.util.logging.Logger;
+
 /**
  * Created with IntelliJ IDEA.
  * User: lordfire
@@ -16,6 +18,8 @@ import com.adrian.music.utils.Utils;
  * To change this template use File | Settings | File Templates.
  */
 public class NotificationLauncher implements Runnable {
+
+    private final static Logger LOG = Logger.getLogger(NotificationLauncher.class.getName());
 
     Track track;
 
@@ -28,7 +32,7 @@ public class NotificationLauncher implements Runnable {
     @Override
     public void run() {
 
-
+             LOG.info("Notification launcher started...");
 
             //Check if console notification is true
             String consoleNotificationConf = Utils.getConfigurationProperties().getProperty("consoleNotification");

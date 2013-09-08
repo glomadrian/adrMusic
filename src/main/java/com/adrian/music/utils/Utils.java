@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,17 +17,29 @@ import java.util.Properties;
 public class Utils {
 
     public static Properties prop=null;
+
+
+    private final static Logger LOG = Logger.getLogger(Utils.class.getName());
+
+
     public static String getOS(){
 
         String os = System.getProperty("os.name").toLowerCase();
         return  os;
     }
 
-    public static void saveImage(String imageUrl, String destinationFile) throws IOException, IOException {
+    public static File saveImage(String imageUrl, String destinationFile) throws IOException, IOException {
+
+        LOG.info("Saving image with name "+destinationFile);
+
 
         URL url = new URL(imageUrl);
         InputStream is = url.openStream();
-        OutputStream os = new FileOutputStream(destinationFile);
+
+        //Create File object
+        File file =new File(destinationFile);
+
+        OutputStream os = new FileOutputStream(file);
 
         byte[] b = new byte[2048];
         int length;
@@ -35,10 +48,11 @@ public class Utils {
             os.write(b, 0, length);
         }
 
+       is.close();
+       os.close();
 
 
-
-
+        return file;
     }
 
     public static Properties getConfigurationProperties(){

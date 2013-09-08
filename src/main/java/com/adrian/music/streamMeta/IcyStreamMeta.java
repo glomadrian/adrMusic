@@ -7,10 +7,14 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IcyStreamMeta {
+
+    private final static Logger LOG = Logger.getLogger(IcyStreamMeta.class.getName());
+
 
     protected URL streamUrl;
     private Map<String, String> metadata;
@@ -142,6 +146,7 @@ public class IcyStreamMeta {
         // Set the data
         metadata = IcyStreamMeta.parseMetadata(metaData.toString());
 
+        LOG.info("Stream metadata: "+metadata);
         // Close
         stream.close();
     }

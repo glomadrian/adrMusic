@@ -9,6 +9,7 @@ import javax.sound.sampled.SourceDataLine;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +19,8 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class SongInfo implements Runnable{
+
+    private final static Logger LOG = Logger.getLogger(SongInfo.class.getName());
 
     String streamingURL;
     URL url;
@@ -34,71 +37,69 @@ public class SongInfo implements Runnable{
     }
 
 
-
-
     @Override
     public void run() {
 
-         int intentos=3;
+        int intentos=3;
+        String artist = null;
+        String title = null;
 
-        while(!line.isOpen() && intentos>0){
 
-            //Se espera una conexion con line
-            try {
-                Thread.sleep(3000);
+
+
+            while(!line.isOpen() && intentos>0){
+                   //Se espera una conexion con line
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    LOG.warning("Closing "+this.getClass());
+                  }
                 intentos--;
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-        }
+               }
 
 
-        while(line.isOpen()){
-            String artist;
-            String title;
-            try {
-
-                metaData.refreshMeta();
-
+            while(line.isOpen()){
 
                 try {
 
-                    title = metaData.getTitle();
+                     metaData.refreshMeta();
 
-                }catch (Exception e){
-                    title = "";
+                     title = metaData.getTitle();
+                     artist = metaData.getArtist();
+
+
+                    if(!nowPlaying.contentEquals(title))
+                    {
+                        nowPlaying=title;
+
+                        Track track = new Track();
+                        track.setName(title);
+                        track.setArtist(artist);
+
+                        MusicEventBus.getMusicEventBus().post(new NewSongPlayingEvent(track));
+                    }
+
+                    Thread.sleep(5000);
+
+
+                }catch (IOException | StringIndexOutOfBoundsException e){
+
+                    LOG.warning("Exception wile read metadata title and artis");
+                    LOG.warning(title+" "+artist);
+
+                    //No se lanza evento en este caso
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
-               try {
 
-                 artist = metaData.getArtist();
 
-                }catch (Exception e){
-                  artist = "";
-                }
 
-                if(!nowPlaying.contentEquals(title))
-                {
-                       nowPlaying=title;
-
-                    Track track = new Track();
-                    track.setName(title);
-                    track.setArtist(artist);
-
-                    MusicEventBus.getMusicEventBus().post(new NewSongPlayingEvent(track));
                 }
 
 
-                Thread.sleep(5000);
-
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-        }
 
     }
 
