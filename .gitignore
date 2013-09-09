@@ -12,3 +12,6 @@ nbproject/private/
 *.swp
 *.out
 /bin
+.war
+*.ear
+*.jar
