@@ -5,11 +5,15 @@ import ch.twinkle.style.INotificationStyle;
 import ch.twinkle.style.theme.DarkDefaultNotification;
 import ch.twinkle.style.theme.LightDefaultNotification;
 import ch.twinkle.window.Positions;
-import com.adrian.music.managers.CoverManager;
+import com.adrian.music.handler.ImageHandler;
 import com.adrian.music.notifications.MusicNotification;
 import com.adrian.music.notifications.nativeJava.sytles.AdrianStyle;
+import com.adrian.music.provider.CoverProvider;
 import com.adrian.music.utils.Utils;
+import es.gldos.coverFinder.exception.ImageNotFoundException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 /**
@@ -24,9 +28,10 @@ public class NativeNotification implements MusicNotification {
     private final static Logger LOG = Logger.getLogger(NativeNotification.class.getName());
 
 
-    NotificationBuilder notification;
-    String imageUri;
-    CoverManager manager;
+    private NotificationBuilder notification;
+    private CoverProvider coverProvider = CoverProvider.getProvider();
+    private String imageUri;
+    private ImageHandler imageHandler;
 
     @Override
     public void createNotification(String title, String artist) {
@@ -37,6 +42,8 @@ public class NativeNotification implements MusicNotification {
         String fadeAnimation = Utils.getConfigurationProperties().getProperty("fadeAnimation");
         String position = Utils.getConfigurationProperties().getProperty("position");
 
+        //Image handler
+        imageHandler = new ImageHandler();
 
         //Fade
         boolean fade = false;
@@ -44,30 +51,42 @@ public class NativeNotification implements MusicNotification {
         if(fadeAnimation.equals("true"))
             fade = true;
 
-        //Image
 
-        manager = new CoverManager();
-        imageUri = manager.downloadCover(title,artist);
+        try {
+            InputStream image = coverProvider.getCover(title,artist);
+            imageUri = imageHandler.saveImage(image);
 
-        notification = new NotificationBuilder();
-        notification
-                .withMessage(title)
-                .withTitle(artist)
-                .withFadeInAnimation(fade)
-                .withFadeOutAnimation(fade)
-                .withDisplayTime(delayTime)
-                .withPosition(getPositions(position))
-                .withIcon(imageUri)
-                .withStyle(getSyle(style));
+            notification = new NotificationBuilder();
+            notification
+                    .withMessage(title)
+                    .withTitle(artist)
+                    .withFadeInAnimation(fade)
+                    .withFadeOutAnimation(fade)
+                    .withDisplayTime(delayTime)
+                    .withPosition(getPositions(position))
+                    .withIcon(imageUri)
+                    .withStyle(getSyle(style));
+
+        } catch (ImageNotFoundException e) {
+           LOG.warning("Image not found excepion");
+        } catch (IOException e) {
+           LOG.warning("IO Exception");
+        }
+
+
+
     }
 
     @Override
     public void sendNotification() {
 
-        LOG.info("Launch native notification");
-        notification.showNotification();
+        if(notification!=null){
 
-        Utils.deleteFile(imageUri);
+            LOG.info("Launch native notification");
+            notification.showNotification();
+            imageHandler.deleteImage(imageUri);
+
+        }
 
     }
 

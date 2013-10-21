@@ -1,4 +1,4 @@
-#java specific
+va specific
 *.class
 
 #netbeans ignore personal stuff 
@@ -15,3 +15,6 @@ nbproject/private/
 .war
 *.ear
 *.jar
+target/
+.idea
+*.iml

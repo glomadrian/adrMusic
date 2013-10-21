@@ -1,10 +1,13 @@
 package com.adrian.music.notifications.os;
 
-import com.adrian.music.managers.CoverManager;
+import com.adrian.music.handler.ImageHandler;
 import com.adrian.music.notifications.MusicNotification;
+import com.adrian.music.provider.CoverProvider;
 import com.adrian.music.utils.Utils;
+import es.gldos.coverFinder.exception.ImageNotFoundException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 /**
@@ -20,9 +23,11 @@ public class GnomeNotidication implements MusicNotification {
 
 
 
-    String title;
-    String artist;
-    String imageUri;
+    private String title;
+    private String artist;
+    private CoverProvider coverProvider = CoverProvider.getProvider();
+    private String imageUri;
+    private ImageHandler imageHandler;
 
     @Override
     public void createNotification(String title, String artist) {
@@ -30,8 +35,22 @@ public class GnomeNotidication implements MusicNotification {
         this.title = title;
         this.artist = artist;
 
-        CoverManager manager = new CoverManager();
-        imageUri = manager.downloadCover(title,artist);
+        //Image handler
+        imageHandler = new ImageHandler();
+
+        InputStream image = null;
+        try {
+
+            image = coverProvider.getCover(title,artist);
+            imageUri = imageHandler.saveImage(image);
+
+        } catch (ImageNotFoundException e) {
+            LOG.warning("Image not found excepion");
+        } catch (IOException e) {
+            LOG.warning("IO Exception");
+        }
+
+
     }
 
     @Override

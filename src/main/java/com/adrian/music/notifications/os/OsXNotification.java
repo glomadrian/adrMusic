@@ -1,13 +1,13 @@
 package com.adrian.music.notifications.os;
 
-import com.adrian.music.managers.CoverManager;
-import com.adrian.music.models.Track;
+import com.adrian.music.handler.ImageHandler;
 import com.adrian.music.notifications.MusicNotification;
-import com.adrian.music.services.TrackSearch.LastFm;
-import com.adrian.music.services.TrackSearch.TrackSearch;
+import com.adrian.music.provider.CoverProvider;
 import com.adrian.music.utils.Utils;
+import es.gldos.coverFinder.exception.ImageNotFoundException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 /**
@@ -22,9 +22,11 @@ public class OsXNotification implements MusicNotification {
     private final static Logger LOG = Logger.getLogger(OsXNotification.class.getName());
 
 
-    String title;
-    String artist;
-    String imageUri;
+    private String title;
+    private String artist;
+    private CoverProvider coverProvider = CoverProvider.getProvider();
+    private String imageUri;
+    private ImageHandler imageHandler;
 
     @Override
     public void createNotification(String title, String artist) {
@@ -32,15 +34,20 @@ public class OsXNotification implements MusicNotification {
         this.title = title;
         this.artist = artist;
 
+        //Image handler
+        imageHandler = new ImageHandler();
 
-        //Imagen cover
-        TrackSearch albumSearch = new LastFm();
-        Track track = albumSearch.searhTrack(title, artist);
+        InputStream image = null;
+        try {
 
-        //Descargar y guardar imagen temporalmente
-        CoverManager manager = new CoverManager();
+            image = coverProvider.getCover(title,artist);
+            imageUri = imageHandler.saveImage(image);
 
-        imageUri = manager.downloadCover(title,artist);
+        } catch (ImageNotFoundException e) {
+            LOG.warning("Image not found excepion");
+        } catch (IOException e) {
+            LOG.warning("IO Exception");
+        }
     }
 
     @Override
